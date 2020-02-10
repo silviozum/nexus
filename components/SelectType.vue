@@ -1,12 +1,11 @@
 <template>
-  <div> 
-    <div class="section-type" v-for="(o, index) in service" v-bind:key="index">
-    <span class="type">{{o.type}}</span>
-    <nav>
-      <li v-for="(p, index) in o.items" v-bind:key="index">
-        <a-checkbox @change="onChange" :value="p">{{p.name}} - R${{p.price}} - Tempo:{{p.time}}</a-checkbox>
-      </li>
-    </nav>
+  <div>
+    <div class="section-type"> 
+      <nav v-for="(i, index) in service" v-bind:key="index">
+        <li v-for="(o, index) in i.values" v-bind:key="index">
+          <a-checkbox @change="onChange(i.type, $event)" :value="o">{{o}}</a-checkbox>
+        </li>
+      </nav>
     </div> 
   </div>
 </template>
@@ -20,56 +19,29 @@ export default {
     return{
       servicesSelected: [],
       service:[
-      {
-        type: 'Cabelo',
-        items: [
-          {id: 0, name: 'Escova/Babyliss', price: 110, time: 60},
-          {id: 1, name: 'Meio Preso/Rabo de Cavalo ', price: 140, time: 60},
-          {id: 2, name: 'Coque ', price: 220, time: 60}
-        ]
-      },
-      {
-        type: 'Maquiagem',
-        items: [
-          {id: 3,name: 'Maquiagem', price: 270, time: 60}
-        ]
-      },
-      {
-        type: 'Unhas',
-        items: [
-          {id: 4, name: 'Manicure', price: 40, time: 60},
-          {id: 5, name: 'Pedicure', price: 40, time: 60}
-        ]
-      },
-      {
-        type: 'Sobrancelha',
-        items: [
-          {id: 6, name: 'Manicure', price: 75, time: 60}
-        ]
-      }
+        {type:'hair', values:[ 'Escova', 'Escova Modelada', 'Cortes']},
+        {type:'skin', values:['Maquiagem', 'Manicure', 'Pedicure', 'Sobrancelha']}
       ]
     }
   },
   methods: {
-    onChange(e) {
+    onChange(type, e) {
       if(e.target.checked){
-        this.servicesSelected.push(e.target.value)
+        this.servicesSelected.push({value:e.target.value, type: type})
+        this.$store.commit('data/setTypeSelected', {type:type, insert:true}) 
       }else{
-        const itemSelected = e.target.value
-        if(this.servicesSelected.length > 0){
-          const self = this
-           this.servicesSelected.map(function(item,index){
-            if(item.id === itemSelected.id){
-               self.servicesSelected.splice(index, 1)
-            }
-          })
-          var filtered = this.servicesSelected.filter(function (el) { 
-              return el != undefined; 
-          });
-          this.servicesSelected = filtered 
-        }
+         this.$store.commit('data/setTypeSelected', {type:type, insert:false}) 
+        // const itemSelected = e.target.value
+        // if(this.servicesSelected.length > 0){
+        //   const self = this
+        //    this.servicesSelected.map(function(item,index){
+        //     if(item.value === itemSelected){
+        //        self.servicesSelected.splice(index, 1)
+        //     }
+        //   })
+        // }
       }
-      this.$store.commit('data/setClients', {id: this.id, services:this.servicesSelected})  
+      // this.$store.commit('data/setClients', {id: this.id, services:this.servicesSelected})  
     
     },
   }
@@ -77,12 +49,33 @@ export default {
 </script>
 
 <style>
-.section-type{
-  margin-bottom: 30px;
-  padding: 20px;
+.section-type nav li{
+  display: inline-block;
+  width: 30%;
+  min-width: 200px;
+  vertical-align: top;
+  margin-right: 1%;
+  margin-bottom: 1%;
 }
-.section-type .type{
-  font-size: 16px;
-  color:gray;
+.section-type .ant-checkbox-wrapper{
+  border-radius:3px;
+  border: 1px solid#e4e3e3;
+  box-shadow: 0 0 2px 2px #f1f1f1;
+  width: 100%;
+  padding: 14px 10px;
+  white-space: nowrap;
+}
+
+
+.section-type .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #ff4359;
+  border-color:#fff;
+}
+.section-type .ant-checkbox-wrapper:hover{
+  background-color: #ff4359;
+  color: #fff;
+}
+.section-type .ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner{
+    border-color:#ffff !important;
 }
 </style>

@@ -1,9 +1,9 @@
 const state ={
     count: 1,
+    typeSelected:[],
     order: {
       date:'',
       time:'',
-
       clients:[{
         id:1,
       }]
@@ -17,6 +17,19 @@ const state ={
     add(state, payload){
       state.order.clients.push(payload)
       state.count = state.count + 1
+    },
+    setTypeSelected(state, payload){
+      if(payload.insert){
+        state.typeSelected.push(payload.type)
+      }else{
+        if(state.typeSelected.length > 0){
+          state.typeSelected.map(function(item, index){
+            if(item === payload.type){
+              state.typeSelected.splice(index, 1)
+            }
+          })
+        }
+      }
     },
     setDetail(state, payload){
       let found = false

@@ -12,8 +12,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.9.5",
+    "ant-design-vue": "^1.1.10",
+    "axios": "^0.19.2",
     "nuxt": "^2.0.0",
-    "ant-design-vue": "^1.1.10"
+    "vue-axios": "^2.1.5"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.0-beta.27",

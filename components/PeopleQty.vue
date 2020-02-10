@@ -1,18 +1,14 @@
 <template>
   <div> 
-    <span>Quantas Pessoas</span>
     <div class="select-qty">
-        <a-select defaultValue="Eu" style="width:120px" @change="handleChange">
-            <a-select-option v-for="i in amount" :value="i.value">{{i.label}}</a-select-option>
-        </a-select>
-        <a-select defaultValue="Individual" @change="handleChangeService" v-if="amountSelect > 1">
-            <a-select-option v-for="i in service" :value="i.value">{{i.label}}</a-select-option>
-        </a-select>
+        <a-radio-group @change="handleChange" v-model="numberClients">
+          <a-radio v-for="(i, index) in amount" v-bind:key="index" :value="i.value">{{i.label }}</a-radio>  
+        </a-radio-group>
     </div>
-    <div class="section-card-detail">
-        <div class="card-detail">
-            {{selectedServices}}
-        </div>
+    <div class="select-qty">
+        <a-radio-group @change="handleChangeService" v-model="modeWork">
+          <a-radio v-for="(i, index) in service" v-bind:key="index" :value="i.value">{{i.label }}</a-radio>  
+        </a-radio-group>
     </div>
   </div>
 </template>
@@ -23,20 +19,21 @@
 export default {
   data () {
     return{
-        amount: [
-            {label:'Eu', value:1},
-            {label:'Eu + 1', value:2},
-            {label:'Eu + 2', value:3},
-            {label:'Eu + 3', value:4},
-            {label:'Eu + 4', value:5} 
-        ],
-        service: [
-            {label:'Sequencial', value:'sequential'},
-            {label:'Simultaneo', value:'simultaneous'}
-        ],
-        serviceSelect: '',
-        amountSelect: 1,
-        details: []
+      numberClients: '',
+      modeWork: '',
+      amount: [
+          {label:'Eu', value:1},
+          {label:'Eu + 1', value:2},
+          {label:'Eu + 2', value:3},
+          {label:'Eu + 3', value:4}
+      ],
+      service: [
+          {label:'Um de cada vez', value:'sequential'},
+          {label:'Ao mesmo tempo', value:'simultaneous'}
+      ],
+      serviceSelect: '',
+      amountSelect: 1,
+      details: []
     }
   },
   computed: {
