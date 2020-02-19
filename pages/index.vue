@@ -2,34 +2,36 @@
   <div>
     <Header/>
     <a-row>
-      <a-col :span="18">    
-        <div v-for="item in service.order.clients">
+      <a-col :span="18">   
+         
+        <div v-for="(item,index) in service.order.clients">
           <section class="content">
-            <div class="section-idx">
+            
+            <div class="section-idx" v-if="index === 0">
               <span>1/4</span>
-              <p>Selecione seus servoços</p>
+              <p>Selecione seus serviços</p>
             </div> 
+
+            <div class="section-idx" v-else>
+              <span>convidado {{item.id}}</span>
+              <p>Selecione seus serviços</p>
+            </div>
+
             <SelectType :id ="item.id"/>
           </section>
-          <section class="content">
+          <section class="content" v-if="index === 0 ">
             <div class="section-idx">
               <span>2/4</span>
-              <p>Selecione seus servoços</p>
-            </div> 
-            <AboutYou :id="item.id" v-if="service.typeSelected.length > 0"/>
-          </section>
-          <section class="content">
-            <div class="section-idx">
-              <span>3/4</span>
-              <p>Selecione seus servoços</p>
+              <p >Inclua amigos e familiares</p>
             </div> 
             <PeopleQty/>
           </section>
         </div>
+
         <div class="content-calendar content">
             <div class="section-idx">
-              <span>4/4</span>
-              <p>Selecione seus servoços</p>
+              <span>3/4</span>
+              <p>Selecione seus serviços</p>
             </div> 
           <input type="date">
           <input type="time" change="timeChange">
@@ -37,26 +39,28 @@
         <div class="content">
           <div class="section-idx">
             <span>4/4</span>
-            <p>Selecione seus servoços</p>
+            <p>Selecione seus serviços</p>
           </div>
           <Address /> 
         </div>
       </a-col>
-      <a-col :span="6"></a-col>
+      <a-col :span="6" style="position:fixed; right:0;">
+        <SidebarCheckout />
+      </a-col>
     </a-row>
   </div>
 </template>
 
 <script>
 import SelectType from '../components/SelectType'
-import AboutYou from '../components/AboutYou'
 import PeopleQty from '../components/PeopleQty'
 import Header from '../components/Header'
 import Address from '../components/Address'
+import SidebarCheckout from '../components/Sidebar'
 
 export default {
   components: {
-    SelectType, AboutYou, PeopleQty, Header, Address
+    SelectType, PeopleQty, Header, Address, SidebarCheckout
   },
   computed: {
     service () {
@@ -65,12 +69,6 @@ export default {
     }
   },
   methods: {
-    add(){
-      this.$store.commit('data/add', {id:this.service.order.clients.length + 1})
-    },
-    onChange(date, dateString) {
-      console.log(date, dateString);
-    },
     timeChange(date, dateString) {
       console.log(date, dateString);
     },
