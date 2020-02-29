@@ -1,42 +1,68 @@
 <template>
   <div>
     <div class="section-type"> 
-      <nav v-for="(i, index) in service" v-bind:key="index">
-        <li v-for="(o, index) in i.values" v-bind:key="index">
-          <a-checkbox @change="onChange(i.type, $event)" :value="o">{{o}}</a-checkbox>
+      <nav>
+        <li v-for="(i, index) in service" v-bind:key="index" :class="{'active' : i.name === serviceActive}">
+          <a-checkbox @change="onChange(i, $event)" :value="i">{{i.name}}</a-checkbox>
         </li>
       </nav>
     </div>
     <div  class="select-qty">
-     
-        <a-radio-group @change="changeHair" :options="detailsHair" v-if="optionsHair">  
-        </a-radio-group>
-        <a-radio-group @change="changeHairType" :options="detailsHairType" v-if="optionsHair">  
-        </a-radio-group>
-        <a-radio-group @change="changeSkinType" :options="detailSkinType" v-if="optionsSkin">  
-        </a-radio-group>
+      <a-radio-group @change="changeHair" v-if="optionsHair" v-model="detailsHairActive">
+         <a-radio 
+          v-for="item in detailsHair"
+          :value="item.value" 
+          :class="{'active' : item.label === detailsHairActive}"
+         >
+         {{item.label}}
+      </a-radio>  
+      </a-radio-group>
       
+      <a-radio-group @change="changeHairType" v-if="optionsHair"  v-model="detailsHairTypeActive">
+        <a-radio 
+            v-for="item in detailsHairType"
+            :value="item.value" 
+            :class="{'active' : item.label === detailsHairTypeActive}"
+          >
+          {{item.label}}
+        </a-radio>  
+      </a-radio-group>
+      <a-radio-group @change="changeSkinType" v-if="optionsSkin" v-model="detailSkinTypeActive">
+        <a-radio 
+            v-for="item in detailSkinType"
+            :value="item.value" 
+            :class="{'active' : item.label === detailSkinTypeActive}"
+          >
+          {{item.label}}
+        </a-radio>  
+      </a-radio-group>
     </div> 
   </div>
 </template>
 
 <script>
 
-
+import { dataService } from '../services'
 export default {
   props:['id'],
   data () {
     return{
-      optionsHair:false,
-      optionsSkin:false,
+      optionsHair:true,
+      optionsSkin:true,
       servicesSelected: [],
+      service:[],
+      god: [],
+      serviceActive:'',
+      detailsHairActive:'',
+      detailsHairTypeActive: '',
+      detailSkinTypeActive:'',
       detailsHair: [
         {value:'Cabelo Curto', label:'Cabelo Curto'},
         {value:'Cabelo médio', label: 'Cabelo médio'},
         {value:'Cabelo longo', label: 'Cabelo longo'}
       ],
       detailsHairType: [
-        {value:'Lisoe', label:'Liso'},
+        {value:'Liso', label:'Liso'},
         {value:'Enrolado', label: 'Enrolado'},
         {value:'Crespo', label: 'Crespo'}
       ],
@@ -44,16 +70,39 @@ export default {
         {value:'Pele Clara', label:'Pele Clara'},
         {value:'Pele Media', label: 'Pele Media'},
         {value:'Pele Escura', label: 'Pele Escura'}
-      ],
-      service:[
-        {type:'hair', values:[ 'Escova', 'Escova Modelada', 'Cortes']},
-        {type:'skin', values:['Maquiagem', 'Manicure', 'Pedicure', 'Sobrancelha']}
       ]
     }
   },
+  async mounted () {
+    const service = await dataService.getServices()
+    this.god = service
+    let oldValue =''
+    this.service = service.filter(function(item){
+      if(item.name !== oldValue){
+        oldValue = item.name
+        return item
+      }
+    })
+
+  },
   methods: {
     changeHair(e){
-      this.$store.commit('data/setDetailLengthHair', {id: this.id, value:e.target.value})
+      this.detailsHairActive = e.target.value
+      let aux = []
+      let selected = this.servicesSelected
+      this.god.filter(function(god){
+          const n = god.lengthHair.localeCompare( e.target.value);
+          if(n > -1){
+            selected.map(function(item){
+                const d = item.name.localeCompare(god.name);
+                if(d  === 0){
+                  console.log(d,god)
+                  aux.push(god)
+                }
+            }) 
+          }
+      })
+      this.$store.commit('data/setType', {id: this.id, services:aux}) 
     },
     changeHairType(e){
       this.$store.commit('data/setDetailsHairType', {id: this.id, value:e.target.value})
@@ -73,26 +122,6 @@ export default {
             }
           })
         }  
-      }
-      if(this.servicesSelected.indexOf('Escova') === -1 &&
-      this.servicesSelected.indexOf('Escova Modelada') === -1&&  
-      this.servicesSelected.indexOf('Cortes') === -1){
-          this.optionsHair=false
-          this.$store.commit('data/setDetailLengthHair', {id: this.id, value:''})
-          this.$store.commit('data/setDetailsHairType', {id: this.id, value:''})
-
-      }else{
-          this.optionsHair = true
-      }
-
-      if(this.servicesSelected.indexOf('Maquiagem') === -1 &&
-      this.servicesSelected.indexOf('Manicure') === -1&&
-      this.servicesSelected.indexOf('Pedicure') === -1&&    
-      this.servicesSelected.indexOf('Sobrancelha') === -1){
-          this.optionsSkin=false
-          this.$store.commit('data/setDetailsColorType', {id: this.id, value:''})
-      }else{
-          this.optionsSkin=true
       }
       this.$store.commit('data/setType', {id: this.id, services:this.servicesSelected})  
     },
@@ -125,6 +154,7 @@ export default {
   background-color: #ff4359;
   border-color:#fff;
 }
+.section-type .active .ant-checkbox-wrapper,
 .section-type .ant-checkbox-wrapper:hover{
   background-color: #ff4359;
   color: #fff;
@@ -132,10 +162,7 @@ export default {
 .section-type .ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner{
     border-color:#ffff !important;
 }
-
-
-
-
+ 
 .select-qty{
   display: inline-block;
   width: 100%;
@@ -154,6 +181,8 @@ export default {
   padding: 14px 10px;
   white-space: nowrap;
 }
+
+.active,
 .select-qty .ant-radio-wrapper:hover{
   background-color: #ff4359;
   color: #fff;
