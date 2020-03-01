@@ -25,10 +25,15 @@
               <p >Inclua amigos e familiares</p>
             </div> 
             <PeopleQty/>
+          <div class="section-idx">
+              <p>Para a sua experiencia</p>
+            </div>
+            <Lead />
           </section>
         </div>
 
         <div class="content-calendar content">
+            <div class="content">
             <div class="section-idx">
               <span>3/4</span>
               <p>Selecione seus serviços</p>
@@ -36,7 +41,6 @@
           <input type="date">
           <input type="time" change="timeChange">
         </div>
-        <div class="content">
           <div class="section-idx">
             <span>4/4</span>
             <p>Selecione seus serviços</p>
@@ -56,11 +60,12 @@ import SelectType from '../components/SelectType'
 import PeopleQty from '../components/PeopleQty'
 import Header from '../components/Header'
 import Address from '../components/Address'
+import Lead from '../components/Lead'
 import SidebarCheckout from '../components/Sidebar'
 
 export default {
   components: {
-    SelectType, PeopleQty, Header, Address, SidebarCheckout
+    SelectType, PeopleQty, Header, Address, SidebarCheckout, Lead
   },
   computed: {
     service () {

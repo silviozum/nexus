@@ -16,13 +16,13 @@
 export default {
     data(){
         return{
-            cep:'',
             logadouro:'',
             numero:'',
             complemento:'',
             bairro:'',
             localidade:'',
             uf:'',
+            cep:''
         }
     },
     methods:{
@@ -35,10 +35,18 @@ export default {
                     this.uf = address.uf
                     this.localidade = address.localidade
                 }
-                this.$refs.numero.$el.focus()
+                // this.$refs.numero.$el.focus()
             }
         }
     },
+    created(){
+        var self = this
+        this.$root.$on('cep', function (e) {
+            self.cep = e
+            console.log('pota', e)
+            self.getAdress(e)
+        })
+    }
 }
 </script>
 
