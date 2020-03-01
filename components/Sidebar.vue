@@ -28,9 +28,9 @@ export default {
 
 <style>
 .content-sidebar-checkout{
-  margin-left: 12px;
+  margin-right: 20px;
   background: #fff;
-  padding: 20px;
+  padding: 30px;
 }
 .service-clients-info{
   margin-bottom: 20px;
