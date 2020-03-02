@@ -138,29 +138,30 @@ export default {
   min-width: 200px;
   vertical-align: top;
   margin-right: 1%;
-  margin-bottom: 1%;
+  margin-bottom: 30px;
 }
 .section-type .ant-checkbox-wrapper{
-  border-radius:3px;
-  border: 1px solid#e4e3e3;
-  box-shadow: 0 0 2px 2px #f1f1f1;
+  border-radius:5px;
+  border: 1px solid#f0f0f0;
+  box-shadow: 1px 1px 3px #ececec;
   width: 100%;
-  padding: 14px 10px;
+  font-size: 16px;
+  padding: 18px 16px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-
 .section-type .ant-checkbox-checked .ant-checkbox-inner {
-  background-color: #ff4359;
-  border-color:#fff;
+  background-color: #6749d9;
+  border-color:transparent;
 }
 .section-type .active .ant-checkbox-wrapper,
 .section-type .ant-checkbox-wrapper:hover{
-  background-color: #ff4359;
+  background-color: #6749d9;
   color: #fff;
 }
 .section-type .ant-checkbox-wrapper:hover .ant-checkbox-checked .ant-checkbox-inner{
-    border-color:#ffff !important;
+    border-color:transparent !important;
 }
  
 .select-qty{

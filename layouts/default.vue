@@ -5,9 +5,9 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Averia+Serif+Libre:300,300i,400,400i,700,700i|PT+Sans:400,400i,700,700i&display=swap');
 html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'PT Sans' !important;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -15,7 +15,10 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  color: #272727;
 }
+
+h1,h2,h3,h4,h5{font-family: 'Averia Serif Libre' !important;}
 
 *,
 *:before,
