@@ -30,7 +30,8 @@ export default {
   */
   plugins: [
     '@/plugins/antd-ui',
-    '@/plugins/axios'
+    '@/plugins/axios',
+    // '@/plugins/payment'
   ],
   /*
   ** Nuxt.js dev-modules

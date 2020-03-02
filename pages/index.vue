@@ -45,7 +45,14 @@
             <span>4/4</span>
             <p>Selecione seus serviços</p>
           </div>
-          <Address /> 
+          <Address />
+          <div class="section-idx">
+            <p>Cadastro</p>
+          </div>
+            <Sign />
+        </div>
+        <div class="content">
+          <Payment />
         </div>
       </a-col>
       <a-col :span="6" style="position:fixed; right:0;">
@@ -61,11 +68,13 @@ import PeopleQty from '../components/PeopleQty'
 import Header from '../components/Header'
 import Address from '../components/Address'
 import Lead from '../components/Lead'
+import Sign from '../components/Sign'
 import SidebarCheckout from '../components/Sidebar'
+import Payment from '../components/Payment'
 
 export default {
   components: {
-    SelectType, PeopleQty, Header, Address, SidebarCheckout, Lead
+    SelectType, PeopleQty, Header, Address, SidebarCheckout, Lead, Sign, Payment
   },
   computed: {
     service () {
