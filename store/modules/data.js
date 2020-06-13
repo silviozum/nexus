@@ -2,13 +2,14 @@ const state ={
     order: {
       date:'',
       time:'',
-      clients:[{
+      guestCreateDtos:[{
         id:0,
         services:[],
-        details:{
+        productIdDtos:[],
+        profileCreateDto:{
           lengthHair:'',
-          typeHair:'',
-          typeSkin:''
+          hairType:'',
+          skinType:''
         }
       }]
     }
@@ -16,42 +17,29 @@ const state ={
   
   const mutations = {
     add(state, payload){
-      const idList = state.order.clients.map(function(item){
+      const idList = state.order.guestCreateDtos.map(function(item){
         return item.id
       })
       if(idList.indexOf(payload) < 0){
-        for(let i = state.order.clients.length; i<=payload; i++ ){
+        for(let i = state.order.guestCreateDtos.length; i<=payload; i++ ){
           if( i > 0){
-            state.order.clients.push({        
+            state.order.guestCreateDtos.push({        
               id: i,
+              productIdDtos:[],
               services:[],
-              details:{
+              profileCreateDto:{
                 lengthHair:'',
-                typeHair:'',
-                typeSkin:''
+                hairType:'',
+                skinType:''
               }
             })
           }
-        }
-      } else {
-        if( payload > 0){
-          state.order.clients = state.order.clients.filter(function(item,index){
-            if(index < payload + 1){
-              return item
-            }
-          })
-        }else{
-          state.order.clients = state.order.clients.filter(function(item,index){
-            if(index  === 0){
-              return item
-            }
-          })
         }
       }
     },
 
     setType(state, payload){
-      state.order.clients.map(function(item){
+      state.order.guestCreateDtos.map(function(item){
         if(item.id === payload.id){
          return item.services = payload.services
         }
@@ -59,15 +47,17 @@ const state ={
     },
 
     setDetailLengthHair(state, payload){
-      state.order.clients[payload.id].details.lengthHair = payload.value
+      state.order.guestCreateDtos[payload.id].profileCreateDto.lengthHair = payload.value
     }, 
-
+    productId(state, payload){
+      state.order.guestCreateDtos[payload.id].profileCreateDto.productIdDtos = payload.list
+    }, 
     setDetailsHairType(state, payload){
-      state.order.clients[payload.id].details.typeHair = payload.value
+      state.order.guestCreateDtos[payload.id].profileCreateDto.hairType = payload.value
     },
 
-    setDetailsColorType(state, payload){
-      state.order.clients[payload.id].details.typeSkin = payload.value
+    setDetailsSkinType(state, payload){
+      state.order.guestCreateDtos[payload.id].profileCreateDto.skinType = payload.value
     }
   }
   

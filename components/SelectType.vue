@@ -9,30 +9,30 @@
     </div>
     <div  class="select-qty">
       <a-radio-group @change="changeHair" v-if="optionsHair" v-model="detailsHairActive">
-         <a-radio 
-          v-for="item in detailsHair"
-          :value="item.value" 
-          :class="{'active' : item.label === detailsHairActive}"
-         >
+        <a-radio 
+        v-for="item in detailsHair"
+        :value="item.value" 
+        :class="{'active' : item.label === detailsHairActive}"
+        >
          {{item.label}}
       </a-radio>  
       </a-radio-group>
       
       <a-radio-group @change="changeHairType" v-if="optionsHair"  v-model="detailsHairTypeActive">
         <a-radio 
-            v-for="item in detailsHairType"
-            :value="item.value" 
-            :class="{'active' : item.label === detailsHairTypeActive}"
-          >
+          v-for="item in detailsHairType"
+          :value="item.value" 
+          :class="{'active' : item.label === detailsHairTypeActive}"
+        >
           {{item.label}}
         </a-radio>  
       </a-radio-group>
       <a-radio-group @change="changeSkinType" v-if="optionsSkin" v-model="detailSkinTypeActive">
         <a-radio 
-            v-for="item in detailSkinType"
-            :value="item.value" 
-            :class="{'active' : item.label === detailSkinTypeActive}"
-          >
+        v-for="item in detailSkinType"
+        :value="item.value" 
+        :class="{'active' : item.label === detailSkinTypeActive}"
+        >
           {{item.label}}
         </a-radio>  
       </a-radio-group>
@@ -56,62 +56,77 @@ export default {
       detailsHairActive:'',
       detailsHairTypeActive: '',
       detailSkinTypeActive:'',
-      detailsHair: [
-        {value:'Cabelo Curto', label:'Cabelo Curto'},
-        {value:'Cabelo médio', label: 'Cabelo médio'},
-        {value:'Cabelo longo', label: 'Cabelo longo'}
-      ],
-      detailsHairType: [
-        {value:'Liso', label:'Liso'},
-        {value:'Enrolado', label: 'Enrolado'},
-        {value:'Crespo', label: 'Crespo'}
-      ],
-      detailSkinType:[
-        {value:'Pele Clara', label:'Pele Clara'},
-        {value:'Pele Media', label: 'Pele Media'},
-        {value:'Pele Escura', label: 'Pele Escura'}
-      ]
+      detailsHair: [],
+      detailsHairType: [],
+      detailSkinType:[],
+      lengthHairActive: ''
     }
   },
   async mounted () {
     const service = await dataService.getServices()
-    this.god = service
+    this.god = service.products
+    for (const item in service.hairTypes) {
+      let label= ''
+      if(service.hairTypes[item] === 'Smooth'){
+        label = 'Liso'
+      }else if(service.hairTypes[item] === 'Rolled'){
+        label = 'Enrolado'
+      }else{
+        label = 'Crespo'
+      }
+      this.detailsHairType.push({value:service.hairTypes[item], label:label})
+    }
+
+    for (const item in service.lengthHairs) {
+      let label= ''
+      if(service.lengthHairs[item] === 'Short'){
+        label = 'Cabelo Curto'
+      }else if(service.lengthHairs[item] === 'Medium'){
+        label = 'Cabelo Médio'
+      }else{
+        label = 'Cabelo Longo'
+      }
+      this.detailsHair.push({value:service.lengthHairs[item], label:label})
+    }
+
+    for (const item in service.skinTypes) {
+      let label= ''
+      if(service.skinTypes[item] === 'Clear'){
+        label = 'Pele Clara'
+      }else if(service.skinTypes[item] === 'Medium'){
+        label = 'Pele Média'
+      }else{
+        label = 'Pele Escura'
+      }
+      this.detailSkinType.push({value:service.skinTypes[item], label:label})
+    }
+
     let oldValue =''
-    this.service = service.filter(function(item){
+    this.service = service.products.filter(function(item){
       if(item.name !== oldValue){
         oldValue = item.name
         return item
       }
     })
-
   },
   methods: {
     changeHair(e){
-      this.detailsHairActive = e.target.value
-      let aux = []
-      let selected = this.servicesSelected
-      this.god.filter(function(god){
-          const n = god.lengthHair.localeCompare( e.target.value);
-          if(n > -1){
-            selected.map(function(item){
-                const d = item.name.localeCompare(god.name);
-                if(d  === 0){
-                  console.log(d,god)
-                  aux.push(god)
-                }
-            }) 
-          }
-      })
-      this.$store.commit('data/setType', {id: this.id, services:aux}) 
+      this.lengthHairActive = e.target.value
+      console.log(e)
+      this.$store.commit('data/setDetailLengthHair', 
+      {id: this.id, value:e.target.value})
     },
     changeHairType(e){
-      this.$store.commit('data/setDetailsHairType', {id: this.id, value:e.target.value})
+      this.$store.commit('data/setDetailsHairType', 
+      {id: this.id, value:e.target.value})
     },
     changeSkinType(e){
-      this.$store.commit('data/setDetailsColorType', {id: this.id, value:e.target.value})
+      this.$store.commit('data/setDetailsSkinType', 
+      {id: this.id, value:e.target.value})
     },
     onChange(type, e) {
       if(e.target.checked){
+
         this.servicesSelected.push(e.target.value)
       }else{
          const itemSelected = e.target.value
@@ -124,7 +139,14 @@ export default {
         }  
       }
       this.$store.commit('data/setType', {id: this.id, services:this.servicesSelected})  
-    },
+    }
+  },
+  watch: {
+    lengthHairActive: function(val){
+      let list = []
+      console.log(val)
+      console.log(this.god, this.servicesSelected.length)
+    }
   }
 }
 </script>

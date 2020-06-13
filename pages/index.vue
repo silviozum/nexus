@@ -5,7 +5,7 @@
       <a-row>
         <a-col :span="18">   
           
-          <div v-for="(item,index) in service.order.clients">
+          <div v-for="(item,index) in service.order.guestCreateDtos">
             <section class="content">
               
               <div class="section-idx" v-if="index === 0">
@@ -46,6 +46,7 @@
               <span>4/4</span>
               <p>Selecione seus serviços</p>
             </div>
+            <Sign />
             <Address /> 
           </div>
         </a-col>
